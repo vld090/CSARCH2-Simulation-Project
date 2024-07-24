@@ -7,19 +7,34 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Cache Simulator (Full Associative / MRU)</h1>
-    <form id="cacheForm">
-        <label for="blockSize">Block Size (words):</label>
-        <input type="number" id="blockSize" name="blockSize" required><br><br>
-        <label for="mmSize">Main Memory Size (words):</label>
-        <input type="number" id="mmSize" name="mmSize" required><br><br>
-        <label for="cacheSize">Cache Size (blocks):</label>
-        <input type="number" id="cacheSize" name="cacheSize" required><br><br>
-        <label for="programFlow">Program Flow (words, comma-separated):</label>
-        <input type="text" id="programFlow" name="programFlow" required><br><br>
-        <button type="submit">Simulate</button>
-    </form>
-    <div id="result"></div>
-    <script src="script.js"></script>
+    <div class="container">
+        <h1>Cache Simulator</h1>
+        <form id="cacheForm">
+            <label for="blockSize">Block Size:</label>
+            <input type="number" id="blockSize" name="blockSize" required><br>
+
+            <label for="mmSize">Main Memory Size (words):</label>
+            <input type="number" id="mmSize" name="mmSize" required><br>
+
+            <label for="cacheSize">Cache Memory Size (blocks):</label>
+            <input type="number" id="cacheSize" name="cacheSize" required><br>
+
+            <label for="programFlow">Program Flow (words, comma separated):</label>
+            <input type="text" id="programFlow" name="programFlow" required><br>
+
+            <button type="button" onclick="simulateCache()">Simulate</button>
+        </form>
+        <div id="output">
+            <h2>Results</h2>
+            <p id="hits"></p>
+            <p id="misses"></p>
+            <p id="missPenalty"></p>
+            <p id="averageMemoryAccessTime"></p>
+            <p id="totalMemoryAccessTime"></p>
+            <p id="cacheSnapshot"></p>
+            <button type="button" onclick="downloadResults()">Download Results</button>
+        </div>
+    </div>
+    <script src="scripts.js"></script>
 </body>
 </html>

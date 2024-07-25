@@ -57,6 +57,3 @@ mm_size = 256  # in blocks
 cache_size = 4  # in blocks
 program_flow = [1,7,5,0,2,1,5,6,5,2,2,0]  # example sequence of block accesses
 
-simulator = CacheSimulator(block_size, mm_size, cache_size, program_flow)
-simulator.simulate()
-simulator.output_results("cache_simulation_results.txt")

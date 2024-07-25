@@ -1,0 +1,5 @@
+Cache Hits: 4
+Cache Misses: 8
+Total Memory Access Time: 192
+Average Memory Access Time: 15.0
+Cache Snapshot: [1, 7, 5, 0]

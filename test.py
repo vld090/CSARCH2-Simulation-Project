@@ -27,11 +27,10 @@ class CacheSimulator:
             self.access_memory(block)
 
     def calculate_times(self):
-        miss_penalty = (block_size*10) + 2 # example value
-        memory_access_time = 1  # example value
+        miss_penalty = (block_size*10) + 2 
         total_accesses = self.hits + self.misses
-        total_memory_access_time = self.hits * memory_access_time + self.misses * miss_penalty
-        average_memory_access_time = (self.hits/total_accesses) + (self.misses/total_accesses) * miss_penalty
+        total_memory_access_time = (self.hits*2*1) + (self.misses*block_size*11) +(self.misses*1)  #hits*2*1 + miss*block_size*10+1 + miss*1
+        average_memory_access_time = (self.hits/total_accesses) + (self.misses/total_accesses) * miss_penalty #hit rate + miss rate * miss penalty
         return total_memory_access_time, average_memory_access_time
 
     def snapshot_cache(self):

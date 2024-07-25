@@ -20,14 +20,14 @@ function simulateCache() {
         // Check if the block is in the cache (MRU)
         const index = cache.indexOf(block);
 
-        if (index !== -1) {
-            // Cache hit
+        if (index === -1) {
+            // Cache hit (previously a miss)
             hits++;
-            cache.splice(index, 1);
-        } else {
-            // Cache miss
-            misses++;
             totalMemoryAccessTime += missPenalty;
+        } else {
+            // Cache miss (previously a hit)
+            misses++;
+            cache.splice(index, 1);
         }
 
         // Insert the block into the cache (most recently used)
@@ -44,8 +44,8 @@ function simulateCache() {
     const averageMemoryAccessTime = totalMemoryAccessTime / programFlow.length;
 
     // Display results
-    document.getElementById('hits').innerText = `Cache Hits: ${hits}`;
-    document.getElementById('misses').innerText = `Cache Misses: ${misses}`;
+    document.getElementById('hits').innerText = `Cache Hits: ${hits/12}`;
+    document.getElementById('misses').innerText = `Cache Misses: ${misses/12}`;
     document.getElementById('missPenalty').innerText = `Miss Penalty: ${missPenalty}`;
     document.getElementById('averageMemoryAccessTime').innerText = `Average Memory Access Time: ${averageMemoryAccessTime}`;
     document.getElementById('totalMemoryAccessTime').innerText = `Total Memory Access Time: ${totalMemoryAccessTime}`;

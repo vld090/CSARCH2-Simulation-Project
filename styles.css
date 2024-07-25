@@ -24,9 +24,11 @@ label {
     margin: 10px 0 5px;
 }
 
-input {
+input, select {
     padding: 10px;
     margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 button {
@@ -44,3 +46,24 @@ button:hover {
 #output {
     margin-top: 20px;
 }
+
+.instructions {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.instructions p {
+    margin: 5px 0;
+}
+
+.instructions ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.instructions ul li {
+    margin-left: 20px;
+}
+

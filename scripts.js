@@ -1,70 +1,111 @@
+// Define constant values for cache and memory access times
+const CACHE_ACCESS_TIME = 1;  // in nanoseconds
+const MEMORY_ACCESS_TIME = 10;  // in nanoseconds
+
+class CacheSimulator {
+    constructor(blockSize, mmSize, cacheSize, programFlow, loadThru) {
+        this.blockSize = blockSize;
+        this.mmSize = mmSize;
+        this.cacheSize = cacheSize;
+        this.programFlow = programFlow.split(',').map(Number); // Convert program flow to array of numbers
+        this.loadThru = loadThru;
+        this.cache = [];
+        this.hits = 0;
+        this.misses = 0;
+        this.accessOrder = [];
+    }
+
+    accessMemory(block) {
+        if (this.cache.includes(block)) {
+            this.hits += 1;
+            const index = this.accessOrder.indexOf(block);
+            this.accessOrder.splice(index, 1);
+            this.accessOrder.push(block);
+        } else {
+            this.misses += 1;
+            if (this.cache.length >= this.cacheSize) {
+                const mruBlock = this.accessOrder.pop();
+                const mruIndex = this.cache.indexOf(mruBlock);
+                this.cache.splice(mruIndex, 1);
+            }
+            this.cache.push(block);
+            this.accessOrder.push(block);
+        }
+    }
+
+    simulate() {
+        this.programFlow.forEach(block => this.accessMemory(block));
+    }
+
+    calculateTimes() {
+        const missPenalty = (this.blockSize * MEMORY_ACCESS_TIME) + 2; // example value
+        const totalAccesses = this.hits + this.misses;
+        const totalMemoryAccessTime = this.hits * CACHE_ACCESS_TIME + this.misses * missPenalty;
+        const averageMemoryAccessTime = (this.hits / totalAccesses) * CACHE_ACCESS_TIME + (this.misses / totalAccesses) * missPenalty;
+        return {
+            missPenalty,
+            totalMemoryAccessTime,
+            averageMemoryAccessTime
+        };
+    }
+
+    snapshotCache() {
+        return this.cache;
+    }
+
+    outputResults() {
+        const { missPenalty, totalMemoryAccessTime, averageMemoryAccessTime } = this.calculateTimes();
+        return {
+            hits: this.hits,
+            misses: this.misses,
+            missPenalty,
+            totalMemoryAccessTime,
+            averageMemoryAccessTime,
+            cacheSnapshot: this.snapshotCache()
+        };
+    }
+}
+
+// Function to handle the simulate button click
 function simulateCache() {
-    // Get input values
+    // Get values from the form inputs
     const blockSize = parseInt(document.getElementById('blockSize').value);
     const mmSize = parseInt(document.getElementById('mmSize').value);
     const cacheSize = parseInt(document.getElementById('cacheSize').value);
-    const programFlow = document.getElementById('programFlow').value.split(',').map(Number);
+    const programFlow = document.getElementById('programFlow').value;
+    const loadThru = document.getElementById('loadThru').value === 'Yes' ? 1 : 0; // Convert Yes to 1, No to 0
 
-    // Initialize cache and other parameters
-    const cache = [];
-    let hits = 0;
-    let misses = 0;
-    const missPenalty = 100; // example value
-    const memoryAccessTime = 10; // example value
-    let totalMemoryAccessTime = 0;
+    // Create a new instance of CacheSimulator
+    const simulator = new CacheSimulator(blockSize, mmSize, cacheSize, programFlow, loadThru);
+    simulator.simulate();
+    const results = simulator.outputResults();
 
-    // Simulate the cache behavior
-    programFlow.forEach(address => {
-        const block = Math.floor(address / blockSize);
-
-        // Check if the block is in the cache (MRU)
-        const index = cache.indexOf(block);
-
-        if (index !== -1) {
-            // Cache hit
-            hits++;
-            cache.splice(index, 1);
-        } else {
-            // Cache miss
-            misses++;
-            totalMemoryAccessTime += missPenalty;
-        }
-
-        // Insert the block into the cache (most recently used)
-        cache.unshift(block);
-
-        // Ensure cache size limit
-        if (cache.length > cacheSize) {
-            cache.pop();
-        }
-
-        totalMemoryAccessTime += memoryAccessTime;
-    });
-
-    const averageMemoryAccessTime = totalMemoryAccessTime / programFlow.length;
-
-    // Display results
-    document.getElementById('hits').innerText = `Cache Hits: ${hits}`;
-    document.getElementById('misses').innerText = `Cache Misses: ${misses}`;
-    document.getElementById('missPenalty').innerText = `Miss Penalty: ${missPenalty}`;
-    document.getElementById('averageMemoryAccessTime').innerText = `Average Memory Access Time: ${averageMemoryAccessTime}`;
-    document.getElementById('totalMemoryAccessTime').innerText = `Total Memory Access Time: ${totalMemoryAccessTime}`;
-    document.getElementById('cacheSnapshot').innerText = `Cache Snapshot: ${cache.join(', ')}`;
+    // Display the results in the webpage
+    document.getElementById('hits').innerText = `Cache Hits: ${results.hits}`;
+    document.getElementById('misses').innerText = `Cache Misses: ${results.misses}`;
+    document.getElementById('missPenalty').innerText = `Miss Penalty: ${results.missPenalty}`;
+    document.getElementById('averageMemoryAccessTime').innerText = `Average Memory Access Time: ${results.averageMemoryAccessTime}`;
+    document.getElementById('totalMemoryAccessTime').innerText = `Total Memory Access Time: ${results.totalMemoryAccessTime}`;
+    document.getElementById('cacheSnapshot').innerText = `Cache Snapshot: ${results.cacheSnapshot}`;
 }
 
+// Function to handle download button click (example)
 function downloadResults() {
-    const hits = document.getElementById('hits').innerText;
-    const misses = document.getElementById('misses').innerText;
-    const missPenalty = document.getElementById('missPenalty').innerText;
-    const averageMemoryAccessTime = document.getElementById('averageMemoryAccessTime').innerText;
-    const totalMemoryAccessTime = document.getElementById('totalMemoryAccessTime').innerText;
-    const cacheSnapshot = document.getElementById('cacheSnapshot').innerText;
-
-    const results = `${hits}\n${misses}\n${missPenalty}\n${averageMemoryAccessTime}\n${totalMemoryAccessTime}\n${cacheSnapshot}`;
-
+    // Example download logic
+    const results = `
+        Cache Hits: ${document.getElementById('hits').innerText}
+        Cache Misses: ${document.getElementById('misses').innerText}
+        Miss Penalty: ${document.getElementById('missPenalty').innerText}
+        Average Memory Access Time: ${document.getElementById('averageMemoryAccessTime').innerText}
+        Total Memory Access Time: ${document.getElementById('totalMemoryAccessTime').innerText}
+        Cache Snapshot: ${document.getElementById('cacheSnapshot').innerText}
+    `;
     const blob = new Blob([results], { type: 'text/plain' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'cache_simulator_results.txt';
-    link.click();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'cache_simulation_results.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }

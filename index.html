@@ -12,32 +12,27 @@
         
         <!-- Instructions -->
         <div class="instructions">
-            <p>Take NOTE that this simulator uses the following constant values:</p>
-            <ul>
-                <li>Cache Access Time : 1 ns</li>
-                <li>Memory Access Time: 10 ns</li>
-            </ul>
+            <p>Take NOTE that this simulator is NON-LOAD-THRU</p>
         </div>
 
         <form id="cacheForm">
+            <label for="cacheAccessTime">Cache Access Time (in nanoseconds):</label>
+            <input type="number" id="cacheAccessTime" name="cacheAccessTime" placeholder="Example: 1" required><br>
+
+            <label for="memoryAccessTime">Memory Access Time (in nanoseconds):</label>
+            <input type="number" id="memoryAccessTime" name="memoryAccessTime" placeholder="Example: 10" required><br>
+
             <label for="blockSize">Block Size:</label>
-            <input type="number" id="blockSize" name="blockSize" required><br>
+            <input type="number" id="blockSize" name="blockSize" placeholder="Example: 2" required><br>
 
             <label for="mmSize">Main Memory Size:</label>
-            <input type="number" id="mmSize" name="mmSize" required><br>
+            <input type="number" id="mmSize" name="mmSize" placeholder="Example: 64" required><br>
 
             <label for="cacheSize">Cache Memory Size:</label>
-            <input type="number" id="cacheSize" name="cacheSize" required><br>
+            <input type="number" id="cacheSize" name="cacheSize" placeholder="Example: 16" required><br>
 
             <label for="programFlow">Program Flow (words, comma separated):</label>
-            <input type="text" id="programFlow" name="programFlow" required><br>
-
-            <!-- Load-Thru Dropdown -->
-            <label for="loadThru">Load-Thru?</label>
-            <select id="loadThru" name="loadThru">
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-            </select><br>
+            <input type="text" id="programFlow" name="programFlow" placeholder="Example: 1,7,8,3,4,5,6,7" required><br>
 
             <button type="button" onclick="simulateCache()">Simulate</button>
         </form>

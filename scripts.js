@@ -7,7 +7,7 @@ class CacheSimulator {
         this.blockSize = blockSize;
         this.mmSize = this.convertToBlocks(mmSize, mmSizeUnit);
         this.cacheSize = this.convertToBlocks(cacheSize, cacheSizeUnit);
-        this.programFlow = this.convertToBlocksArray(programFlow.split(',').map(Number), programFlowUnit);
+        this.programFlow = this.convertProgramFlow(programFlow.split(',').map(Number), programFlowUnit);
         this.cache = [];
         this.hits = 0;
         this.misses = 0;
@@ -18,7 +18,7 @@ class CacheSimulator {
         return unit === 'blocks' ? size : Math.ceil(size / this.blockSize);
     }
 
-    convertToBlocksArray(array, unit) {
+    convertProgramFlow(array, unit) {
         return unit === 'blocks' ? array : array.map(value => Math.floor(value / this.blockSize));
     }
 

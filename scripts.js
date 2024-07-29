@@ -3,16 +3,23 @@ const CACHE_ACCESS_TIME = 1;  // in nanoseconds
 const MEMORY_ACCESS_TIME = 10;  // in nanoseconds
 
 class CacheSimulator {
-    constructor(blockSize, mmSize, cacheSize, programFlow, loadThru) {
+    constructor(blockSize, mmSize, cacheSize, programFlow, mmSizeUnit, cacheSizeUnit, programFlowUnit) {
         this.blockSize = blockSize;
-        this.mmSize = mmSize;
-        this.cacheSize = cacheSize;
-        this.programFlow = programFlow.split(',').map(Number); // Convert program flow to array of numbers
-        this.loadThru = loadThru;
+        this.mmSize = this.convertToBlocks(mmSize, mmSizeUnit);
+        this.cacheSize = this.convertToBlocks(cacheSize, cacheSizeUnit);
+        this.programFlow = this.convertToBlocksArray(programFlow.split(',').map(Number), programFlowUnit);
         this.cache = [];
         this.hits = 0;
         this.misses = 0;
         this.accessOrder = [];
+    }
+
+    convertToBlocks(size, unit) {
+        return unit === 'blocks' ? size : Math.ceil(size / this.blockSize);
+    }
+
+    convertToBlocksArray(array, unit) {
+        return unit === 'blocks' ? array : array.map(value => Math.floor(value / this.blockSize));
     }
 
     accessMemory(block) {
@@ -73,10 +80,12 @@ function simulateCache() {
     const mmSize = parseInt(document.getElementById('mmSize').value);
     const cacheSize = parseInt(document.getElementById('cacheSize').value);
     const programFlow = document.getElementById('programFlow').value;
-    const loadThru = document.getElementById('loadThru').value === 'Yes' ? 1 : 0; // Convert Yes to 1, No to 0
+    const mmSizeUnit = document.querySelector('input[name="mmSizeUnit"]:checked').value;
+    const cacheSizeUnit = document.querySelector('input[name="cacheSizeUnit"]:checked').value;
+    const programFlowUnit = document.querySelector('input[name="programFlowUnit"]:checked').value;
 
     // Create a new instance of CacheSimulator
-    const simulator = new CacheSimulator(blockSize, mmSize, cacheSize, programFlow, loadThru);
+    const simulator = new CacheSimulator(blockSize, mmSize, cacheSize, programFlow, mmSizeUnit, cacheSizeUnit, programFlowUnit);
     simulator.simulate();
     const results = simulator.outputResults();
 

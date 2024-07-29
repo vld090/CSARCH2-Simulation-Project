@@ -24,11 +24,22 @@ label {
     margin: 10px 0 5px;
 }
 
-input, select {
+input[type="number"], input[type="text"] {
     padding: 10px;
     margin-bottom: 20px;
     width: 100%;
     box-sizing: border-box;
+}
+
+span {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+span label {
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 button {
@@ -37,6 +48,8 @@ button {
     color: #fff;
     border: none;
     cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 button:hover {
@@ -66,4 +79,3 @@ button:hover {
 .instructions ul li {
     margin-left: 20px;
 }
-

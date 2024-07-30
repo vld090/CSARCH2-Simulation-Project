@@ -1,28 +1,76 @@
-// Define constant values for cache and memory access times
-const CACHE_ACCESS_TIME = 1;  // in nanoseconds
-const MEMORY_ACCESS_TIME = 10;  // in nanoseconds
+document.getElementById('cacheForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the form from submitting
 
-// Function to handle the simulate button click
-function simulateCache() {
-    // Get values from the form inputs
-    const blockSize = parseInt(document.getElementById('blockSize').value);
-    const mmSize = parseInt(document.getElementById('mmSize').value);
-    const cacheSize = parseInt(document.getElementById('cacheSize').value);
-    const programFlow = document.getElementById('programFlow').value;
-    const loadThru = document.getElementById('loadThru').value === 'Yes' ? 1 : 0; // Convert Yes to 1, No to 0
+    simulateCache();
+});
 
-    // Example of displaying the values (you can modify this as per your simulation logic)
-    console.log("Block Size:", blockSize);
-    console.log("Main Memory Size:", mmSize);
-    console.log("Cache Size:", cacheSize);
-    console.log("Program Flow:", programFlow);
-    console.log("Load-Thru:", loadThru);
-
-    // Perform your cache simulation logic here using the extracted values
+function convertToBlocks(size, unit, blockSize) {
+    if (unit === "words") {
+        return Math.ceil(size / blockSize);
+    }
+    return size;
 }
 
-// Function to handle download button click (example)
+function convertProgramFlowToBlocks(programFlow, unit, blockSize) {
+    if (unit === "words") {
+        const blockNumbers = programFlow.map(address => Math.floor(address / blockSize));
+        const offsets = programFlow.map(address => address % blockSize);
+        return { PFlowConverted: blockNumbers, PFlowOffset: offsets };
+    }
+    return { PFlowConverted: programFlow, PFlowOffset: [] }; // If the unit is already in blocks, no conversion needed
+}
+
+function simulateCache() {
+    // Get values from the form
+    const memoryAccessTime = parseInt(document.getElementById('memoryAccessTime').value);
+    const blockSize = parseInt(document.getElementById('blockSize').value);
+    const mmSize = parseInt(document.getElementById('mmSize').value);
+    const mmSizeUnit = document.querySelector('input[name="mmSizeUnit"]:checked').value;
+    const cacheSize = parseInt(document.getElementById('cacheSize').value);
+    const cacheSizeUnit = document.querySelector('input[name="cacheSizeUnit"]:checked').value;
+    const programFlow = document.getElementById('programFlow').value.split(',').map(Number);
+    const programFlowUnit = document.querySelector('input[name="programFlowUnit"]:checked').value;
+
+    // Convert sizes to blocks if necessary
+    const MMConverted = convertToBlocks(mmSize, mmSizeUnit, blockSize);
+    const CacheConverted = convertToBlocks(cacheSize, cacheSizeUnit, blockSize);
+
+    // Convert program flow to blocks and offsets if necessary
+    const { PFlowConverted, PFlowOffset } = convertProgramFlowToBlocks(programFlow, programFlowUnit, blockSize);
+
+    // Now you can use MMConverted, CacheConverted, PFlowConverted, and PFlowOffset for further processing
+    console.log("Main Memory Size in Blocks:", MMConverted);
+    console.log("Cache Memory Size in Blocks:", CacheConverted);
+    console.log("Program Flow in Blocks:", PFlowConverted);
+    console.log("Program Flow Offsets:", PFlowOffset);
+
+    // Add your cache simulation logic here
+
+    // Example result display (replace with your actual results)
+    document.getElementById('hits').textContent = "Hits: ...";
+    document.getElementById('misses').textContent = "Misses: ...";
+    document.getElementById('missPenalty').textContent = "Miss Penalty: ...";
+    document.getElementById('averageMemoryAccessTime').textContent = "Average Memory Access Time: ...";
+    document.getElementById('totalMemoryAccessTime').textContent = "Total Memory Access Time: ...";
+    document.getElementById('cacheSnapshot').textContent = "Cache Snapshot: ...";
+}
+
 function downloadResults() {
     // Example download logic
-    console.log("Downloading results...");
+    const results = `
+        Cache Hits: ${document.getElementById('hits').innerText}
+        Cache Misses: ${document.getElementById('misses').innerText}
+        Miss Penalty: ${document.getElementById('missPenalty').innerText}
+        Average Memory Access Time: ${document.getElementById('averageMemoryAccessTime').innerText}
+        Total Memory Access Time: ${document.getElementById('totalMemoryAccessTime').innerText}
+        Cache Snapshot: ${document.getElementById('cacheSnapshot').innerText}
+    `;
+    const blob = new Blob([results], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'cache_simulation_results.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }

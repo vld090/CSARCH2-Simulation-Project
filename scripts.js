@@ -1,14 +1,27 @@
-// Define constant values for cache and memory access times
-const CACHE_ACCESS_TIME = 1;  // in nanoseconds
-const MEMORY_ACCESS_TIME = 10;  // in nanoseconds
+document.getElementById('cacheForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    simulateCache();
+});
+
+function convertToBlocks(size, unit, blockSize) {
+    return unit === "words" ? Math.ceil(size / blockSize) : size;
+}
+
+function convertProgramFlowToBlocks(programFlow, unit, blockSize) {
+    if (unit === "words") {
+        const blockNumbers = programFlow.map(address => Math.floor(address / blockSize));
+        return { PFlowConverted: blockNumbers, PFlowOffset: programFlow.map(address => address % blockSize) };
+    }
+    return { PFlowConverted: programFlow, PFlowOffset: [] };
+}
 
 class CacheSimulator {
-    constructor(blockSize, mmSize, cacheSize, programFlow, loadThru) {
+    constructor(blockSize, mmSize, cacheSize, programFlow, memoryAccessTime) {
         this.blockSize = blockSize;
-        this.mmSize = mmSize;
         this.cacheSize = cacheSize;
-        this.programFlow = programFlow.split(',').map(Number); // Convert program flow to array of numbers
-        this.loadThru = loadThru;
+        this.programFlow = programFlow;
+        this.memoryAccessTime = memoryAccessTime;
+        this.cacheAccessTime = 1;
         this.cache = [];
         this.hits = 0;
         this.misses = 0;
@@ -17,20 +30,16 @@ class CacheSimulator {
 
     accessMemory(block) {
         if (this.cache.includes(block)) {
-            this.hits += 1;
-            const index = this.accessOrder.indexOf(block);
-            this.accessOrder.splice(index, 1);
-            this.accessOrder.push(block);
+            this.hits++;
+            this.accessOrder.splice(this.accessOrder.indexOf(block), 1);
         } else {
-            this.misses += 1;
+            this.misses++;
             if (this.cache.length >= this.cacheSize) {
-                const mruBlock = this.accessOrder.pop();
-                const mruIndex = this.cache.indexOf(mruBlock);
-                this.cache.splice(mruIndex, 1);
+                this.cache.splice(this.cache.indexOf(this.accessOrder.pop()), 1);
             }
             this.cache.push(block);
-            this.accessOrder.push(block);
         }
+        this.accessOrder.push(block);
     }
 
     simulate() {
@@ -38,67 +47,49 @@ class CacheSimulator {
     }
 
     calculateTimes() {
-        const missPenalty = (this.blockSize * MEMORY_ACCESS_TIME) + 2; // example value
+        const missPenalty = this.cacheAccessTime + (this.blockSize * this.memoryAccessTime) + this.cacheAccessTime;
         const totalAccesses = this.hits + this.misses;
-        const totalMemoryAccessTime = this.hits * CACHE_ACCESS_TIME + this.misses * missPenalty;
-        const averageMemoryAccessTime = (this.hits / totalAccesses) * CACHE_ACCESS_TIME + (this.misses / totalAccesses) * missPenalty;
+        const avgMemoryAccessTime = ((this.hits / totalAccesses) * this.cacheAccessTime) + ((this.misses / totalAccesses) * missPenalty);
+        const totalMemoryAccessTime = (this.hits * this.blockSize * this.cacheAccessTime) + (this.misses * this.blockSize * (this.cacheAccessTime + this.memoryAccessTime)) + (this.misses * this.cacheAccessTime);
         return {
-            missPenalty,
-            totalMemoryAccessTime,
-            averageMemoryAccessTime
+            totalMemoryAccessTime: totalMemoryAccessTime.toFixed(2),
+            avgMemoryAccessTime: avgMemoryAccessTime.toFixed(2),
+            missPenalty: missPenalty.toFixed(2)
         };
-    }
-
-    snapshotCache() {
-        return this.cache;
     }
 
     outputResults() {
-        const { missPenalty, totalMemoryAccessTime, averageMemoryAccessTime } = this.calculateTimes();
-        return {
-            hits: this.hits,
-            misses: this.misses,
-            missPenalty,
-            totalMemoryAccessTime,
-            averageMemoryAccessTime,
-            cacheSnapshot: this.snapshotCache()
-        };
+        const { totalMemoryAccessTime, avgMemoryAccessTime, missPenalty } = this.calculateTimes();
+        document.getElementById('hits').textContent = `Hits: ${this.hits}`;
+        document.getElementById('misses').textContent = `Misses: ${this.misses}`;
+        document.getElementById('missPenalty').textContent = `Miss Penalty: ${missPenalty} ns`;
+        document.getElementById('averageMemoryAccessTime').textContent = `Average Memory Access Time: ${avgMemoryAccessTime} ns`;
+        document.getElementById('totalMemoryAccessTime').textContent = `Total Memory Access Time: ${totalMemoryAccessTime} ns`;
+        document.getElementById('cacheSnapshot').textContent = `Cache Snapshot: ${this.cache}`;
     }
 }
 
-// Function to handle the simulate button click
 function simulateCache() {
-    // Get values from the form inputs
+    const memoryAccessTime = parseInt(document.getElementById('memoryAccessTime').value);
     const blockSize = parseInt(document.getElementById('blockSize').value);
-    const mmSize = parseInt(document.getElementById('mmSize').value);
-    const cacheSize = parseInt(document.getElementById('cacheSize').value);
-    const programFlow = document.getElementById('programFlow').value;
-    const loadThru = document.getElementById('loadThru').value === 'Yes' ? 1 : 0; // Convert Yes to 1, No to 0
+    let mmSize = convertToBlocks(parseInt(document.getElementById('mmSize').value), document.querySelector('input[name="mmSizeUnit"]:checked').value, blockSize);
+    let cacheSize = convertToBlocks(parseInt(document.getElementById('cacheSize').value), document.querySelector('input[name="cacheSizeUnit"]:checked').value, blockSize);
+    let programFlow = document.getElementById('programFlow').value.split(',').map(Number);
+    const { PFlowConverted } = convertProgramFlowToBlocks(programFlow, document.querySelector('input[name="programFlowUnit"]:checked').value, blockSize);
 
-    // Create a new instance of CacheSimulator
-    const simulator = new CacheSimulator(blockSize, mmSize, cacheSize, programFlow, loadThru);
-    simulator.simulate();
-    const results = simulator.outputResults();
-
-    // Display the results in the webpage
-    document.getElementById('hits').innerText = `Cache Hits: ${results.hits}`;
-    document.getElementById('misses').innerText = `Cache Misses: ${results.misses}`;
-    document.getElementById('missPenalty').innerText = `Miss Penalty: ${results.missPenalty}`;
-    document.getElementById('averageMemoryAccessTime').innerText = `Average Memory Access Time: ${results.averageMemoryAccessTime}`;
-    document.getElementById('totalMemoryAccessTime').innerText = `Total Memory Access Time: ${results.totalMemoryAccessTime}`;
-    document.getElementById('cacheSnapshot').innerText = `Cache Snapshot: ${results.cacheSnapshot}`;
+    const cacheSimulator = new CacheSimulator(blockSize, mmSize, cacheSize, PFlowConverted, memoryAccessTime);
+    cacheSimulator.simulate();
+    cacheSimulator.outputResults();
 }
 
-// Function to handle download button click (example)
 function downloadResults() {
-    // Example download logic
     const results = `
-        Cache Hits: ${document.getElementById('hits').innerText}
-        Cache Misses: ${document.getElementById('misses').innerText}
-        Miss Penalty: ${document.getElementById('missPenalty').innerText}
-        Average Memory Access Time: ${document.getElementById('averageMemoryAccessTime').innerText}
-        Total Memory Access Time: ${document.getElementById('totalMemoryAccessTime').innerText}
-        Cache Snapshot: ${document.getElementById('cacheSnapshot').innerText}
+        Cache Hits: ${document.getElementById('hits').textContent}
+        Cache Misses: ${document.getElementById('misses').textContent}
+        Miss Penalty: ${document.getElementById('missPenalty').textContent}
+        Average Memory Access Time: ${document.getElementById('averageMemoryAccessTime').textContent}
+        Total Memory Access Time: ${document.getElementById('totalMemoryAccessTime').textContent}
+        Cache Snapshot: ${document.getElementById('cacheSnapshot').textContent}
     `;
     const blob = new Blob([results], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);

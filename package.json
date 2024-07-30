@@ -1,0 +1,14 @@
+{
+  "name": "csarch2-simulation-project",
+  "version": "1.0.0",
+  "description": "A cache simulator (Full associative / MRU).",
+  "main": "index.html",
+  "scripts": {
+    "test": "cypress"
+  },
+  "author": "Valiant Lance Dionela",
+  "license": "ISC",
+  "dependencies": {
+    "cypress": "^13.13.1"
+  }
+}

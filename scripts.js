@@ -84,12 +84,12 @@ function simulateCache() {
 
 function downloadResults() {
     const results = `
-        Cache Hits: ${document.getElementById('hits').textContent}
-        Cache Misses: ${document.getElementById('misses').textContent}
-        Miss Penalty: ${document.getElementById('missPenalty').textContent}
-        Average Memory Access Time: ${document.getElementById('averageMemoryAccessTime').textContent}
-        Total Memory Access Time: ${document.getElementById('totalMemoryAccessTime').textContent}
-        Cache Snapshot: ${document.getElementById('cacheSnapshot').textContent}
+        ${document.getElementById('hits').textContent}
+        ${document.getElementById('misses').textContent}
+        ${document.getElementById('missPenalty').textContent}
+        ${document.getElementById('averageMemoryAccessTime').textContent}
+        ${document.getElementById('totalMemoryAccessTime').textContent}
+        ${document.getElementById('cacheSnapshot').textContent}
     `;
     const blob = new Blob([results], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);

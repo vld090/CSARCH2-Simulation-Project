@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cache Simulator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Full Associative MRU Cache Simulator</h1>
+        
+        <!-- Instructions -->
+        <div class="instructions">
+            <p>Take NOTE:</p>
+            <ul>
+                <li><strong>This simulator uses NON-LOAD-THRU read policy.</strong></li>
+                <li><strong>Fixed value of Cache Access Time = 1ns.</strong></li>
+                <li><strong>Created By (Surnames): David, Dionela, Syjueco, and Tieng (CSARCH2 - S14).</strong></li>
+            </ul>
+        </div>
+
+        <form id="cacheForm">
+            <label for="memoryAccessTime">Memory Access Time (in nanoseconds):</label>
+            <input type="number" id="memoryAccessTime" name="memoryAccessTime" placeholder="Example: 10" required><br>
+
+            <label for="blockSize">Block Size:</label>
+            <input type="number" id="blockSize" name="blockSize" placeholder="Example: 2" required><br>
+
+            <label for="mmSize">Main Memory Size:</label>
+            <input type="number" id="mmSize" name="mmSize" placeholder="Example: 64" required>
+            <span>
+                <input type="radio" id="mmSizeWords" name="mmSizeUnit" value="words" checked>
+                <label for="mmSizeWords">Words</label>
+                <input type="radio" id="mmSizeBlocks" name="mmSizeUnit" value="blocks">
+                <label for="mmSizeBlocks">Blocks</label>
+            </span><br>
+
+            <label for="cacheSize">Cache Memory Size:</label>
+            <input type="number" id="cacheSize" name="cacheSize" placeholder="Example: 16" required>
+            <span>
+                <input type="radio" id="cacheSizeWords" name="cacheSizeUnit" value="words" checked>
+                <label for="cacheSizeWords">Words</label>
+                <input type="radio" id="cacheSizeBlocks" name="cacheSizeUnit" value="blocks">
+                <label for="cacheSizeBlocks">Blocks</label>
+            </span><br>
+
+            <label for="programFlow">Program Flow (comma separated):</label>
+            <input type="text" id="programFlow" name="programFlow" placeholder="Example: 1,7,8,3,4,5,6,7" required>
+            <span>
+                <input type="radio" id="programFlowWords" name="programFlowUnit" value="words" checked>
+                <label for="programFlowWords">Words</label>
+                <input type="radio" id="programFlowBlocks" name="programFlowUnit" value="blocks">
+                <label for="programFlowBlocks">Blocks</label>
+            </span><br>
+
+            <button type="button" class="clear-btn" onclick="clearAll()">Clear All Inputs</button>
+            <button type="button" onclick="simulateCache()">Simulate</button>
+        </form>
+        
+        <div id="output">
+            <h2>Results</h2>
+            <p id="hits"></p>
+            <p id="misses"></p>
+            <p id="missPenalty"></p>
+            <p id="averageMemoryAccessTime"></p>
+            <p id="totalMemoryAccessTime"></p>
+            <p id="cacheSnapshot"></p>
+            <button type="button" onclick="downloadResults()">Download Results</button>
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>

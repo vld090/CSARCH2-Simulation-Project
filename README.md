@@ -43,14 +43,15 @@ The user's inputs are in BLOCKS; specifically, the Main Memory Size (MM), Cache 
     Block Size (always in words): 2 words
     MM: 20 blocks
     CMS: 4 blocks
-    Program Flow: 1,7,5,0,2,1,5,6,5,2,2,0
+    Program Flow: 1,7,5,0,2,1,5,6,5,2,2,0 blocks
 
 ![Output-01](essential-imgs/Output-01.png)
-These are the results from the app which are consistent with the manual paper-and-pen computation below.
+
+The results above are consistent with the manual paper-and-pen computation below.
 ![Test-Case-01](essential-imgs/Test-Case-01.jpeg)
 
 ### Case #2
-The user's inputs are in WORDS; specifically, the Main Memory Size (MM), Cache Memory Size (CMS), and Program Flow. If the aforementioned parameters are in words, word-to-block conversion will be done for the input values [See Formula for Word-To-Block](#Formulas Used)
+The user's inputs are in WORDS; specifically, the Main Memory Size (MM), Cache Memory Size (CMS), and Program Flow. If the aforementioned parameters are in words, word-to-block conversion will be done for the input values [See Formula for Word-To-Block](#formulas-used)
 
 
     Memory Access Time: 10ns
@@ -60,5 +61,6 @@ The user's inputs are in WORDS; specifically, the Main Memory Size (MM), Cache M
     Program Flow: 1,2,3,4,5,5 words
 
 ![Output-02](essential-imgs/Output-02.png)
-These are the results from the app which are consistent with the manual paper-and-pen computation below.
+
+The results above are consistent with the manual paper-and-pen computation below.
 ![Test-Case-02](essential-imgs/Test-Case-02.jpeg)

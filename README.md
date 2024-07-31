@@ -51,7 +51,7 @@ The results above are consistent with the manual paper-and-pen computation below
 ![Test-Case-01](essential-imgs/Test-Case-01.jpeg)
 
 ### Case #2
-The user's inputs are in WORDS; specifically, the Main Memory Size (MM), Cache Memory Size (CMS), and Program Flow. If the aforementioned parameters are in words, word-to-block conversion will be done for the input values [See Formula for Word-To-Block](#formulas-used)
+The user's inputs are in WORDS; specifically, the Main Memory Size (MM), Cache Memory Size (CMS), and Program Flow. If the aforementioned parameters are in words, word-to-block conversion will be done for the input values ([See Formula for Word-To-Block](#formulas-used)).
 
 
     Memory Access Time: 10ns
@@ -64,3 +64,17 @@ The user's inputs are in WORDS; specifically, the Main Memory Size (MM), Cache M
 
 The results above are consistent with the manual paper-and-pen computation below.
 ![Test-Case-02](essential-imgs/Test-Case-02.jpeg)
+
+### Case #3
+The Cache Memory Size is bigger than the Main Memory Size. The MM & CMS are in WORDS, while the Program Flow is in BLOCKS.
+
+    Memory Access Time: 10ns
+    Block Size (always in words): 4 words
+    MM: 16 words
+    CMS: 64 words
+    Program Flow: 0,4,8,12,0,4,8,12 blocks
+
+![Output-03](essential-imgs/Output-02.png)
+
+The results above are consistent with the manual paper-and-pen computation below.
+![Test-Case-03](essential-imgs/Test-Case-03.jpeg)

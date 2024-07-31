@@ -24,6 +24,9 @@ The cache simulator is an interactive web app designed to emulate a full associa
 LINK To the Website: [https://cache-sim-full-associative-mru.netlify.app/](https://cache-sim-full-associative-mru.netlify.app/)
 
 ## DEMO
+* LINK: [https://drive.google.com/file/d/1dgh0sxDmYRvqMEPdz9u-NC6MQV2Y-6Y2/view?usp=drive_link](https://drive.google.com/file/d/1dgh0sxDmYRvqMEPdz9u-NC6MQV2Y-6Y2/view?usp=drive_link)
+
+* Backup LINK: [https://drive.google.com/file/d/1fhbJCDDPsahyIjl2uWr9D9iMP9iEioI5/view?usp=drive_link](https://drive.google.com/file/d/1fhbJCDDPsahyIjl2uWr9D9iMP9iEioI5/view?usp=drive_link)
 
 ## Formulas Used
 

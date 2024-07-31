@@ -35,6 +35,7 @@ The app accepts both blocks and words as input for the Main Memory Size, Cache M
 
 ### Case #1
 User's inputs are in blocks; specifically, the Main Memory Size (MM), Cache Memory Size (CMS), and Program Flow.
+
     Memory Access Time: 10ns
     Block Size (always in words): 2 words
     MM: 20 blocks

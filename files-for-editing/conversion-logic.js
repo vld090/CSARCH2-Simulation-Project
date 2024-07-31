@@ -1,5 +1,5 @@
 document.getElementById('cacheForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the form from submitting
+    event.preventDefault();
 
     simulateCache();
 });
@@ -17,11 +17,10 @@ function convertProgramFlowToBlocks(programFlow, unit, blockSize) {
         const offsets = programFlow.map(address => address % blockSize);
         return { PFlowConverted: blockNumbers, PFlowOffset: offsets };
     }
-    return { PFlowConverted: programFlow, PFlowOffset: [] }; // If the unit is already in blocks, no conversion needed
+    return { PFlowConverted: programFlow, PFlowOffset: [] };
 }
 
 function simulateCache() {
-    // Get values from the form
     const memoryAccessTime = parseInt(document.getElementById('memoryAccessTime').value);
     const blockSize = parseInt(document.getElementById('blockSize').value);
     const mmSize = parseInt(document.getElementById('mmSize').value);
@@ -31,22 +30,16 @@ function simulateCache() {
     const programFlow = document.getElementById('programFlow').value.split(',').map(Number);
     const programFlowUnit = document.querySelector('input[name="programFlowUnit"]:checked').value;
 
-    // Convert sizes to blocks if necessary
     const MMConverted = convertToBlocks(mmSize, mmSizeUnit, blockSize);
     const CacheConverted = convertToBlocks(cacheSize, cacheSizeUnit, blockSize);
 
-    // Convert program flow to blocks and offsets if necessary
     const { PFlowConverted, PFlowOffset } = convertProgramFlowToBlocks(programFlow, programFlowUnit, blockSize);
 
-    // Now you can use MMConverted, CacheConverted, PFlowConverted, and PFlowOffset for further processing
     console.log("Main Memory Size in Blocks:", MMConverted);
     console.log("Cache Memory Size in Blocks:", CacheConverted);
     console.log("Program Flow in Blocks:", PFlowConverted);
     console.log("Program Flow Offsets:", PFlowOffset);
 
-    // Add your cache simulation logic here
-
-    // Example result display (replace with your actual results)
     document.getElementById('hits').textContent = "Hits: ...";
     document.getElementById('misses').textContent = "Misses: ...";
     document.getElementById('missPenalty').textContent = "Miss Penalty: ...";
@@ -56,7 +49,6 @@ function simulateCache() {
 }
 
 function downloadResults() {
-    // Example download logic
     const results = `
         Cache Hits: ${document.getElementById('hits').innerText}
         Cache Misses: ${document.getElementById('misses').innerText}

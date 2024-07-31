@@ -100,3 +100,13 @@ function downloadResults() {
     a.click();
     document.body.removeChild(a);
 }
+
+function clearAll() {
+    document.getElementById('cacheForm').reset();
+    document.getElementById('hits').textContent = '';
+    document.getElementById('misses').textContent = '';
+    document.getElementById('missPenalty').textContent = '';
+    document.getElementById('averageMemoryAccessTime').textContent = '';
+    document.getElementById('totalMemoryAccessTime').textContent = '';
+    document.getElementById('cacheSnapshot').textContent = '';
+}

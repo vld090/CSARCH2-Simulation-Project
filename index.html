@@ -8,14 +8,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>Cache Simulator</h1>
+        <h1>Full Associative MRU Cache Simulator</h1>
         
         <!-- Instructions -->
         <div class="instructions">
             <p>Take NOTE:</p>
             <ul>
-                <li><strong>This simulator uses NON-LOAD-THRU read policy</strong></li>
-                <li><strong>Fixed value of Cache Access Time = 1ns</strong></li>
+                <li><strong>This simulator uses NON-LOAD-THRU read policy.</strong></li>
+                <li><strong>Fixed value of Cache Access Time = 1ns.</strong></li>
             </ul>
         </div>
 
@@ -53,6 +53,7 @@
                 <label for="programFlowBlocks">Blocks</label>
             </span><br>
 
+            <button type="button" class="clear-btn" onclick="clearAll()">Clear All Inputs</button>
             <button type="button" onclick="simulateCache()">Simulate</button>
         </form>
         

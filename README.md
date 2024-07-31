@@ -19,5 +19,6 @@ The cache simulator is an interactive web app designed to emulate a full associa
 3. Input Main Memory Size (choose either words or blocks).
 4. Input Cache Memory Size (choose either words or blocks).
 5. Input Program Flow (comma separated and choose either words or blocks).
-6. Click the "Simulate" to generate results - Hits, Misses, Miss Penalty, Average Access Time, and Total Memory Access Time.
+6. Click the "Simulate" button to generate results - Hits, Misses, Miss Penalty, Average Access Time, and Total Memory Access Time.
 
+## DEMO
